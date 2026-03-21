@@ -48,22 +48,22 @@ export function MicrosoftLoginCta() {
             </motion.div>
             <h1 className="text-2xl font-semibold tracking-tight">Bookify</h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Prihlásenie cez Microsoft spracuje backend — presmerujeme ťa na jeho
-              OAuth endpoint.
+              Microsoft sign-in is handled by the backend — you will be redirected to
+              its OAuth flow.
             </p>
           </div>
           <Card className="border-border/80 shadow-lg">
             <CardHeader>
-              <CardTitle>Prihlásiť sa</CardTitle>
+              <CardTitle>Sign in</CardTitle>
               <CardDescription>
-                Pokračovaním otvoríš prihlásenie u Microsoftu na tvojom API.
+                Continue to sign in with Microsoft through your API.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {!backend ? (
                 <p className="text-sm text-destructive">
-                  Nastav <code className="rounded bg-muted px-1">NEXT_PUBLIC_API_URL</code>{" "}
-                  na URL backendu (napr. http://localhost:4000).
+                  Set <code className="rounded bg-muted px-1">NEXT_PUBLIC_API_URL</code>{" "}
+                  to your backend URL (e.g. http://localhost:4000).
                 </p>
               ) : null}
               <Button
@@ -88,7 +88,7 @@ export function MicrosoftLoginCta() {
                     <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
                   </svg>
                 )}
-                Pokračovať s Microsoft
+                Continue with Microsoft
               </Button>
               <p className="text-center text-xs text-muted-foreground">
                 Endpoint:{" "}

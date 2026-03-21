@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
 import { AppProviders } from "@/components/app-providers";
+import { LayoutSuspenseFallback } from "@/components/layout-suspense-fallback";
 import { PageTransition } from "@/components/page-transition";
 import "./globals.css";
 
@@ -32,7 +34,9 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <AppProviders>
-          <PageTransition>{children}</PageTransition>
+          <Suspense fallback={<LayoutSuspenseFallback />}>
+            <PageTransition>{children}</PageTransition>
+          </Suspense>
         </AppProviders>
       </body>
     </html>

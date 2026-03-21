@@ -31,16 +31,12 @@ export default function AppError({ error, reset }: AppErrorProps) {
         >
           <AlertTriangle className="size-7" aria-hidden />
         </motion.div>
-        <h1 className="text-xl font-semibold tracking-tight">
-          Something went wrong
-        </h1>
+        <h1 className="text-xl font-semibold tracking-tight">Something went wrong</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          {error.message || "An unexpected error occurred. You can try again."}
+          {error.message || "An unexpected error occurred. Please try again."}
         </p>
         {error.digest ? (
-          <p className="mt-2 font-mono text-xs text-muted-foreground">
-            {error.digest}
-          </p>
+          <p className="mt-2 font-mono text-xs text-muted-foreground">{error.digest}</p>
         ) : null}
         <Button className="mt-6" onClick={() => reset()}>
           Try again

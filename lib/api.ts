@@ -1,16 +1,16 @@
 /**
- * Backend API — auth a dáta sú na serveri. Nastav v `.env.local` základnú URL.
+ * Backend API — auth and data live on the server. Set the base URL in `.env.local`.
  */
 
-/** Verejná báza pre presmerovania z prehliadača (OAuth login). */
+/** Public base URL for browser redirects (OAuth login). */
 export function getApiBaseUrl(): string {
   const base = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "";
   return base;
 }
 
 /**
- * Cesta na štart Microsoft OAuth na backende (GET → redirect na Microsoft).
- * Príklad: `/auth/microsoft` alebo `/v1/oauth/microsoft`
+ * Path on the backend that starts Microsoft OAuth (GET → redirect to Microsoft).
+ * Example: `/auth/microsoft` or `/v1/oauth/microsoft`
  */
 export function getMicrosoftLoginPath(): string {
   return (
@@ -18,9 +18,7 @@ export function getMicrosoftLoginPath(): string {
   );
 }
 
-/**
- * Absolútna URL pre presmerovanie používateľa na backend (Microsoft login).
- */
+/** Absolute URL to send the user to the backend for Microsoft login. */
 export function getMicrosoftLoginUrl(): string {
   const base = getApiBaseUrl();
   const path = getMicrosoftLoginPath();

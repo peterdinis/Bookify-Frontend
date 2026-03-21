@@ -1,7 +1,7 @@
 import { MicrosoftLoginCta } from "@/components/microsoft-login-cta";
 
 export const metadata = {
-  title: "Prihlásenie — Bookify",
+  title: "Sign in — Bookify",
 };
 
 export default function LoginPage() {

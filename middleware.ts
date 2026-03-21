@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-/** Inline env helpers — middleware bundler v Next 16 občas nevyrieši `@/` importy z `lib/`. */
+/** Inline env helpers — Next 16 middleware bundler may not resolve `@/` imports from `lib/`. */
 function getServerApiBaseUrl(): string {
   const fromServer = process.env.API_URL?.replace(/\/$/, "");
   if (fromServer) return fromServer;
