@@ -60,8 +60,8 @@ export function AudiobookDashboard({
               Pick up where you left off
             </h1>
             <p className="max-w-2xl text-pretty text-muted-foreground sm:text-lg">
-              Browse mock titles, upload new audio, and use the player with skip,
-              speed, and volume controls—ready to wire to your backend.
+              Browse mock titles, upload new audio, and use the player with
+              skip, speed, and volume controls—ready to wire to your backend.
             </p>
           </motion.section>
 
@@ -94,11 +94,18 @@ export function AudiobookDashboard({
               >
                 <Card className="border-primary/10 bg-card/80 shadow-sm backdrop-blur-sm">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-                    <stat.icon className="size-4 text-muted-foreground" aria-hidden />
+                    <CardTitle className="text-sm font-medium">
+                      {stat.title}
+                    </CardTitle>
+                    <stat.icon
+                      className="size-4 text-muted-foreground"
+                      aria-hidden
+                    />
                   </CardHeader>
                   <CardContent>
-                    <p className="text-2xl font-semibold tabular-nums">{stat.value}</p>
+                    <p className="text-2xl font-semibold tabular-nums">
+                      {stat.value}
+                    </p>
                     <CardDescription>{stat.hint}</CardDescription>
                   </CardContent>
                 </Card>

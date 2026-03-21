@@ -1,13 +1,11 @@
 "use client";
 
+import type { ProcessServerConfigFunction } from "filepond";
 import { useRouter } from "next/navigation";
 import type { TransitionStartFunction } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { ProcessServerConfigFunction } from "filepond";
 import { FilePond } from "react-filepond";
 import { uploadAudiobookAction } from "@/app/actions/audiobooks";
-import { createOptimisticAudiobook } from "@/lib/optimistic-audiobook";
-import type { Audiobook } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,6 +16,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { createOptimisticAudiobook } from "@/lib/optimistic-audiobook";
+import type { Audiobook } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 import "filepond/dist/filepond.min.css";
@@ -47,7 +47,17 @@ export function AudiobookUpload({
   }, [title, author]);
 
   const process = useCallback<ProcessServerConfigFunction>(
-    (_fieldName, file, _metadata, load, error, progress, abort, transfer, options) => {
+    (
+      _fieldName,
+      file,
+      _metadata,
+      load,
+      error,
+      progress,
+      abort,
+      transfer,
+      options,
+    ) => {
       void abort;
       void transfer;
       void options;
@@ -162,7 +172,9 @@ export function AudiobookUpload({
               aria-invalid={Boolean(fieldErrors.author)}
             />
             {fieldErrors.author?.[0] ? (
-              <p className="text-xs text-destructive">{fieldErrors.author[0]}</p>
+              <p className="text-xs text-destructive">
+                {fieldErrors.author[0]}
+              </p>
             ) : null}
           </div>
         </div>

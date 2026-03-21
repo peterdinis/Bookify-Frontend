@@ -1,7 +1,7 @@
 "use client";
 
-import type { TransitionStartFunction } from "react";
 import { Headphones, Upload } from "lucide-react";
+import type { TransitionStartFunction } from "react";
 import { AudiobookLibrary } from "@/components/audiobook-library";
 import { AudiobookUpload } from "@/components/audiobook-upload";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -36,10 +36,16 @@ export function DashboardWorkspace({
           Upload
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="listen" className="mt-0 flex-1 focus-visible:outline-none">
+      <TabsContent
+        value="listen"
+        className="mt-0 flex-1 focus-visible:outline-none"
+      >
         <AudiobookLibrary books={books} />
       </TabsContent>
-      <TabsContent value="upload" className="mt-0 flex-1 focus-visible:outline-none">
+      <TabsContent
+        value="upload"
+        className="mt-0 flex-1 focus-visible:outline-none"
+      >
         <div className="mx-auto max-w-2xl">
           <AudiobookUpload
             startUploadTransition={startUploadTransition}

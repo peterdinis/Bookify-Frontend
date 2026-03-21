@@ -15,8 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
 import type { Audiobook } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 function formatDuration(minutes: number) {
   const h = Math.floor(minutes / 60);
@@ -32,9 +32,7 @@ export function AudiobookLibrary({
   books: Audiobook[];
   className?: string;
 }) {
-  const [activeId, setActiveId] = useState<string | null>(
-    books[0]?.id ?? null,
-  );
+  const [activeId, setActiveId] = useState<string | null>(books[0]?.id ?? null);
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
@@ -144,7 +142,10 @@ export function AudiobookLibrary({
                             {book.title}
                           </p>
                           <p className="mt-1 flex items-center gap-1 truncate text-xs text-muted-foreground">
-                            <User className="size-3 shrink-0 opacity-70" aria-hidden />
+                            <User
+                              className="size-3 shrink-0 opacity-70"
+                              aria-hidden
+                            />
                             {book.author}
                           </p>
                           <div className="mt-2 flex flex-wrap gap-1.5">
@@ -157,8 +158,14 @@ export function AudiobookLibrary({
                                 Uploading…
                               </Badge>
                             ) : (
-                              <Badge variant="secondary" className="font-normal">
-                                <Clock className="mr-1 size-3 opacity-70" aria-hidden />
+                              <Badge
+                                variant="secondary"
+                                className="font-normal"
+                              >
+                                <Clock
+                                  className="mr-1 size-3 opacity-70"
+                                  aria-hidden
+                                />
                                 {formatDuration(book.durationMinutes)}
                               </Badge>
                             )}
@@ -235,7 +242,8 @@ export function AudiobookLibrary({
               <CardHeader className="pb-2">
                 <CardTitle className="text-base">About this title</CardTitle>
                 <CardDescription>
-                  Added {new Date(active.uploadedAt).toLocaleDateString(undefined, {
+                  Added{" "}
+                  {new Date(active.uploadedAt).toLocaleDateString(undefined, {
                     dateStyle: "medium",
                   })}
                 </CardDescription>
@@ -255,10 +263,12 @@ export function AudiobookLibrary({
           </>
         ) : (
           <Card className="flex min-h-[320px] flex-col items-center justify-center border-dashed bg-muted/20 p-8 text-center">
-            <CardTitle className="text-base font-medium">No audiobooks yet</CardTitle>
+            <CardTitle className="text-base font-medium">
+              No audiobooks yet
+            </CardTitle>
             <CardDescription className="mt-2 max-w-sm">
-              Open the Upload tab to add a file, or refresh if you expected seeded
-              mock data.
+              Open the Upload tab to add a file, or refresh if you expected
+              seeded mock data.
             </CardDescription>
           </Card>
         )}

@@ -31,11 +31,9 @@ export function createMockAudiobook(overrides?: Partial<Audiobook>): Audiobook {
     title,
     author,
     description:
-      overrides?.description ??
-      faker.lorem.paragraph({ min: 2, max: 4 }),
+      overrides?.description ?? faker.lorem.paragraph({ min: 2, max: 4 }),
     durationMinutes:
-      overrides?.durationMinutes ??
-      faker.number.int({ min: 12, max: 480 }),
+      overrides?.durationMinutes ?? faker.number.int({ min: 12, max: 480 }),
     narrator:
       overrides?.narrator !== undefined
         ? overrides.narrator
@@ -43,12 +41,10 @@ export function createMockAudiobook(overrides?: Partial<Audiobook>): Audiobook {
           ? faker.person.fullName()
           : null,
     coverImageUrl:
-      overrides?.coverImageUrl ??
-      faker.image.url({ width: 400, height: 400 }),
+      overrides?.coverImageUrl ?? faker.image.url({ width: 400, height: 400 }),
     audioUrl: overrides?.audioUrl ?? pickAudioUrl(id),
     uploadedAt:
-      overrides?.uploadedAt ??
-      faker.date.recent({ days: 60 }).toISOString(),
+      overrides?.uploadedAt ?? faker.date.recent({ days: 60 }).toISOString(),
     originalFileName: overrides?.originalFileName ?? null,
     sizeBytes: overrides?.sizeBytes ?? null,
   };

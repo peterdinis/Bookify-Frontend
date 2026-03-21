@@ -1,9 +1,8 @@
 "use server";
 
 import { z } from "zod";
-import { auth } from "@/auth";
-import { actionClient } from "@/lib/safe-action";
 import { addAudiobookFromUpload, getAudiobooks } from "@/lib/audiobook-store";
+import { actionClient } from "@/lib/safe-action";
 
 const uploadSchema = z.object({
   title: z.string().trim().min(1, "Title is required").max(200),
@@ -24,17 +23,11 @@ const uploadSchema = z.object({
 
 export const listAudiobooksAction = actionClient
   .inputSchema(z.object({}))
-  .action(async () => {
-    const session = await auth();
-    if (!session?.user) throw new Error("Unauthorized");
-    return getAudiobooks();
-  });
+  .action(async () => getAudiobooks());
 
 export const uploadAudiobookAction = actionClient
   .inputSchema(uploadSchema)
   .action(async ({ parsedInput }) => {
-    const session = await auth();
-    if (!session?.user) throw new Error("Unauthorized");
     const book = addAudiobookFromUpload(parsedInput);
     return { id: book.id, title: book.title };
   });

@@ -25,7 +25,13 @@ export function ThemeToggle() {
 
   if (!hydrated) {
     return (
-      <Button variant="outline" size="icon" className="size-9" disabled aria-hidden>
+      <Button
+        variant="outline"
+        size="icon"
+        className="size-9"
+        disabled
+        aria-hidden
+      >
         <Sun className="size-4" />
       </Button>
     );

@@ -5,13 +5,12 @@ import { AlertTriangle } from "lucide-react";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
-export default function Error({
-  error,
-  reset,
-}: {
+type AppErrorProps = {
   error: Error & { digest?: string };
   reset: () => void;
-}) {
+};
+
+export default function AppError({ error, reset }: AppErrorProps) {
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -32,7 +31,9 @@ export default function Error({
         >
           <AlertTriangle className="size-7" aria-hidden />
         </motion.div>
-        <h1 className="text-xl font-semibold tracking-tight">Something went wrong</h1>
+        <h1 className="text-xl font-semibold tracking-tight">
+          Something went wrong
+        </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {error.message || "An unexpected error occurred. You can try again."}
         </p>

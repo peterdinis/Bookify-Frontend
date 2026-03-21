@@ -61,13 +61,16 @@ export function AudiobookPlayer({ src, title, className }: Props) {
     if (el) el.playbackRate = speed;
   }, [speed]);
 
-  const seekToPercent = useCallback((percent: number) => {
-    const el = audioRef.current;
-    if (!el || !Number.isFinite(duration) || duration <= 0) return;
-    const next = (percent / 100) * duration;
-    el.currentTime = Math.min(duration, Math.max(0, next));
-    setCurrent(next);
-  }, [duration]);
+  const seekToPercent = useCallback(
+    (percent: number) => {
+      const el = audioRef.current;
+      if (!el || !Number.isFinite(duration) || duration <= 0) return;
+      const next = (percent / 100) * duration;
+      el.currentTime = Math.min(duration, Math.max(0, next));
+      setCurrent(next);
+    },
+    [duration],
+  );
 
   const skip = useCallback(
     (delta: number) => {
@@ -117,7 +120,9 @@ export function AudiobookPlayer({ src, title, className }: Props) {
         onCanPlay={() => setBuffering(false)}
         onPlaying={() => setBuffering(false)}
         onError={() =>
-          setError("Could not load audio. Check your connection or try another title.")
+          setError(
+            "Could not load audio. Check your connection or try another title.",
+          )
         }
       />
 
@@ -142,7 +147,12 @@ export function AudiobookPlayer({ src, title, className }: Props) {
               const el = audioRef.current;
               if (!el) return;
               if (playing) void el.pause();
-              else void el.play().catch(() => setError("Playback was blocked. Try clicking play again."));
+              else
+                void el
+                  .play()
+                  .catch(() =>
+                    setError("Playback was blocked. Try clicking play again."),
+                  );
             }}
           >
             {buffering && playing ? (
@@ -169,7 +179,9 @@ export function AudiobookPlayer({ src, title, className }: Props) {
           <div className="flex items-center justify-between gap-3 text-xs tabular-nums text-muted-foreground">
             <span>{formatClock(current)}</span>
             <span className="hidden sm:inline">{formatClock(duration)}</span>
-            <span className="sm:hidden">−{formatClock(Math.max(0, duration - current))}</span>
+            <span className="sm:hidden">
+              −{formatClock(Math.max(0, duration - current))}
+            </span>
           </div>
           <div
             className="py-1"
@@ -198,8 +210,14 @@ export function AudiobookPlayer({ src, title, className }: Props) {
         <div className="flex flex-col gap-4 border-t border-border/60 pt-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="flex min-w-0 flex-1 flex-col gap-2">
             <div className="flex items-center gap-2">
-              <Gauge className="size-3.5 shrink-0 text-muted-foreground" aria-hidden />
-              <Label htmlFor="playback-speed" className="text-xs text-muted-foreground">
+              <Gauge
+                className="size-3.5 shrink-0 text-muted-foreground"
+                aria-hidden
+              />
+              <Label
+                htmlFor="playback-speed"
+                className="text-xs text-muted-foreground"
+              >
                 Speed
               </Label>
             </div>

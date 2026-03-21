@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { signIn } from "next-auth/react";
 import { Loader2, Podcast } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -12,10 +11,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getApiBaseUrl, getMicrosoftLoginUrl } from "@/lib/api";
 import { ThemeToggle } from "@/components/theme-toggle";
 
-export function LoginPanel() {
+export function MicrosoftLoginCta() {
   const [loading, setLoading] = useState(false);
+  const backend = getApiBaseUrl();
+  const loginUrl = getMicrosoftLoginUrl();
+
+  const startLogin = () => {
+    if (!backend) return;
+    setLoading(true);
+    window.location.assign(loginUrl);
+  };
 
   return (
     <div className="relative flex min-h-full flex-col bg-background">
@@ -40,25 +48,29 @@ export function LoginPanel() {
             </motion.div>
             <h1 className="text-2xl font-semibold tracking-tight">Bookify</h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Sign in with your Microsoft work or school account to continue.
+              Prihlásenie cez Microsoft spracuje backend — presmerujeme ťa na jeho
+              OAuth endpoint.
             </p>
           </div>
           <Card className="border-border/80 shadow-lg">
             <CardHeader>
-              <CardTitle>Sign in</CardTitle>
+              <CardTitle>Prihlásiť sa</CardTitle>
               <CardDescription>
-                You will be redirected to Microsoft to authenticate.
+                Pokračovaním otvoríš prihlásenie u Microsoftu na tvojom API.
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
+              {!backend ? (
+                <p className="text-sm text-destructive">
+                  Nastav <code className="rounded bg-muted px-1">NEXT_PUBLIC_API_URL</code>{" "}
+                  na URL backendu (napr. http://localhost:4000).
+                </p>
+              ) : null}
               <Button
                 type="button"
                 className="h-11 w-full gap-2"
-                disabled={loading}
-                onClick={() => {
-                  setLoading(true);
-                  void signIn("microsoft-entra-id", { callbackUrl: "/" });
-                }}
+                disabled={loading || !backend}
+                onClick={startLogin}
               >
                 {loading ? (
                   <Loader2 className="size-4 animate-spin" aria-hidden />
@@ -69,14 +81,21 @@ export function LoginPanel() {
                     aria-hidden
                     xmlns="http://www.w3.org/2000/svg"
                   >
+                    <title>Microsoft</title>
                     <rect x="1" y="1" width="9" height="9" fill="#f25022" />
                     <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
                     <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
                     <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
                   </svg>
                 )}
-                Continue with Microsoft
+                Pokračovať s Microsoft
               </Button>
+              <p className="text-center text-xs text-muted-foreground">
+                Endpoint:{" "}
+                <code className="break-all rounded bg-muted px-1 text-[0.7rem]">
+                  {loginUrl}
+                </code>
+              </p>
             </CardContent>
           </Card>
         </motion.div>
