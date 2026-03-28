@@ -1,46 +1,54 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { AlertTriangle } from "lucide-react";
+import { AlertCircle, RefreshCcw } from "lucide-react";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
-type AppErrorProps = {
+export default function Error({
+  error,
+  reset,
+}: {
   error: Error & { digest?: string };
   reset: () => void;
-};
-
-export default function AppError({ error, reset }: AppErrorProps) {
+}) {
   useEffect(() => {
-    console.error(error);
+    // Log the error to an error reporting service
+    console.error("Global error caught:", error);
   }, [error]);
 
   return (
-    <div className="flex min-h-[50vh] flex-col items-center justify-center gap-6 px-4 py-16">
+    <div className="flex min-h-[400px] flex-col items-center justify-center p-6 text-center">
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="flex max-w-md flex-col items-center text-center"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+        className="flex flex-col items-center"
       >
-        <motion.div
-          className="mb-4 flex size-14 items-center justify-center rounded-full bg-destructive/15 text-destructive"
-          initial={{ scale: 0.8 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", stiffness: 400, damping: 18 }}
-        >
-          <AlertTriangle className="size-7" aria-hidden />
-        </motion.div>
-        <h1 className="text-xl font-semibold tracking-tight">Something went wrong</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {error.message || "An unexpected error occurred. Please try again."}
+        <div className="mb-6 flex size-16 items-center justify-center rounded-full bg-destructive/10 text-destructive">
+          <AlertCircle className="size-8" />
+        </div>
+        <h2 className="mb-2 text-2xl font-bold tracking-tight">
+          Something went wrong!
+        </h2>
+        <p className="mb-8 max-w-md text-muted-foreground">
+          {error.message || "An unexpected error occurred while processing your request. Please try refreshing the page or contact support if the problem persists."}
         </p>
-        {error.digest ? (
-          <p className="mt-2 font-mono text-xs text-muted-foreground">{error.digest}</p>
-        ) : null}
-        <Button className="mt-6" onClick={() => reset()}>
-          Try again
-        </Button>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <Button
+            onClick={() => reset()}
+            className="gap-2"
+          >
+            <RefreshCcw className="size-4" />
+            Try again
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => window.location.href = "/"}
+          >
+            Go home
+          </Button>
+        </div>
       </motion.div>
     </div>
   );

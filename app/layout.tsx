@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
+import { Toaster } from "sonner";
 import { AppProviders } from "@/components/app-providers";
 import { LayoutSuspenseFallback } from "@/components/layout-suspense-fallback";
 import { PageTransition } from "@/components/page-transition";
@@ -37,6 +38,7 @@ export default function RootLayout({
           <Suspense fallback={<LayoutSuspenseFallback />}>
             <PageTransition>{children}</PageTransition>
           </Suspense>
+          <Toaster position="top-right" richColors closeButton />
         </AppProviders>
       </body>
     </html>

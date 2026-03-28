@@ -101,33 +101,44 @@ export function AudiobookUpload({
         });
 
         if (result?.serverError) {
+          toast.error(result.serverError);
           error(result.serverError);
           return;
         }
 
         if (result?.validationErrors) {
-          const ve = result.validationErrors as Record<string, unknown>;
+          const ve = result.validationErrors as Record<string, any>;
           const flat: FieldErrors = {};
+          
           for (const [key, val] of Object.entries(ve)) {
-            if (
-              val &&
-              typeof val === "object" &&
-              "_errors" in val &&
-              Array.isArray((val as { _errors: string[] })._errors)
-            ) {
+            if (val && typeof val === "object" && "_errors" in val) {
               flat[key] = (val as { _errors: string[] })._errors;
+            } else if (Array.isArray(val)) {
+              flat[key] = val;
             }
           }
+          
           setFieldErrors(flat);
-          const globalMsg =
-            (ve as { _errors?: string[] })._errors?.[0] ??
-            Object.values(flat).flat()[0];
-          error(globalMsg ?? "Validation failed");
+          const firstError = Object.values(flat).flat()[0] ?? "Validation failed";
+          toast.error(firstError);
+          error(firstError);
           return;
         }
 
-        load(result?.data?.id ?? "ok");
-        router.refresh();
+        if (result?.data) {
+          toast.success(`Uploaded "${t.trim()}" successfully.`);
+          load(result.data.id || "ok");
+          
+          // Reset form
+          setTitle("");
+          setAuthor("");
+          setPondKey(prev => prev + 1);
+          
+          router.refresh();
+        } else {
+          toast.error("An unexpected error occurred.");
+          error("Upload failed");
+        }
       };
 
       if (startUploadTransition) {
