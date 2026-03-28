@@ -24,7 +24,7 @@ const uploadSchema = z.object({
 export const listAudiobooksAction = actionClient
   .inputSchema(z.object({}))
   .action(async () => {
-    const apiBase = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
+    const apiBase = process.env.API_URL || "http://localhost:5041";
     const url = `${apiBase}/api/audiobooks`;
 
     const cookieStore = await cookies();
@@ -39,12 +39,12 @@ export const listAudiobooksAction = actionClient
       });
 
       if (!res.ok) {
-        throw new Error(`Failed to fetch audiobooks: ${res.statusText}`);
+        throw new Error(`Backend error (${res.status}): ${res.statusText}`);
       }
 
       return await res.json();
     } catch (error) {
-      console.error("List audiobooks failed:", error);
+      console.error("[Action] listAudiobooksAction failed:", error);
       throw error;
     }
   });
@@ -52,8 +52,8 @@ export const listAudiobooksAction = actionClient
 export const uploadAudiobookAction = actionClient
   .inputSchema(uploadSchema)
   .action(async ({ parsedInput }) => {
-    const apiBase = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
-    const url = `${apiBase}/api/audiobooks/upload`;
+    const apiBase = process.env.API_URL || "http://localhost:5041";
+    const url = `${apiBase}/api/audiobooks`;
 
     const cookieStore = await cookies();
     const cookieHeader = cookieStore.toString();
@@ -69,12 +69,12 @@ export const uploadAudiobookAction = actionClient
       });
 
       if (!res.ok) {
-        throw new Error(`Failed to upload audiobook: ${res.statusText}`);
+        throw new Error(`Backend error (${res.status}): ${res.statusText}`);
       }
 
       return await res.json();
     } catch (error) {
-      console.error("Upload audiobook failed:", error);
+      console.error("[Action] uploadAudiobookAction failed:", error);
       throw error;
     }
   });

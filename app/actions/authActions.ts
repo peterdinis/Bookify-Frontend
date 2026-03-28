@@ -13,9 +13,8 @@ import { z } from "zod";
 export const getCurrentUserAction = actionClient
   .inputSchema(z.object({}))
   .action(async () => {
-    const apiBase = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
-    const mePath = process.env.AUTH_ME_PATH || "/api/auth/me";
-    const url = `${apiBase}${mePath}`;
+    const apiBase = process.env.API_URL || "http://localhost:5041";
+    const url = `${apiBase}/api/auth/me`;
 
     const cookieStore = await cookies();
     const cookieHeader = cookieStore.toString();
