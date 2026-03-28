@@ -56,14 +56,14 @@ export function MicrosoftLoginCta() {
             <CardHeader>
               <CardTitle>Sign in</CardTitle>
               <CardDescription>
-                Continue to sign in with Microsoft through your API.
+                Sign in with your Microsoft account to access your audio library.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {!backend ? (
                 <p className="text-sm text-destructive">
                   Set <code className="rounded bg-muted px-1">NEXT_PUBLIC_API_URL</code>{" "}
-                  to your backend URL (e.g. http://localhost:4000).
+                  to your backend URL.
                 </p>
               ) : null}
               <div className="space-y-4">
@@ -91,47 +91,7 @@ export function MicrosoftLoginCta() {
                   )}
                   Continue with Microsoft
                 </Button>
-
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-card px-2 text-muted-foreground">
-                      Or dev login
-                    </span>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    disabled={loading}
-                    onClick={async () => {
-                      setLoading(true);
-                      const { loginAction } = await import("@/app/actions/authActions");
-                      const res = await loginAction({
-                        email: "dev@bookify.local",
-                        password: "password",
-                      });
-                      if (res?.data?.success) {
-                        window.location.href = "/";
-                      } else {
-                        setLoading(false);
-                      }
-                    }}
-                  >
-                    Quick Dev Login
-                  </Button>
-                </div>
               </div>
-              <p className="text-center text-xs text-muted-foreground pt-2">
-                Endpoint:{" "}
-                <code className="break-all rounded bg-muted px-1 text-[0.7rem]">
-                  {loginUrl}
-                </code>
-              </p>
             </CardContent>
           </Card>
         </motion.div>
