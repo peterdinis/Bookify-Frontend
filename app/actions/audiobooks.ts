@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { addAudiobookFromUpload, getAudiobooks } from "@/lib/audiobook-store";
+import { cookies } from "next/headers";
 import { actionClient } from "@/lib/safe-action";
 
 const uploadSchema = z.object({
@@ -23,11 +23,58 @@ const uploadSchema = z.object({
 
 export const listAudiobooksAction = actionClient
   .inputSchema(z.object({}))
-  .action(async () => getAudiobooks());
+  .action(async () => {
+    const apiBase = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
+    const url = `${apiBase}/api/audiobooks`;
+
+    const cookieStore = await cookies();
+    const cookieHeader = cookieStore.toString();
+
+    try {
+      const res = await fetch(url, {
+        headers: {
+          cookie: cookieHeader,
+        },
+        cache: "no-store",
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to fetch audiobooks: ${res.statusText}`);
+      }
+
+      return await res.json();
+    } catch (error) {
+      console.error("List audiobooks failed:", error);
+      throw error;
+    }
+  });
 
 export const uploadAudiobookAction = actionClient
   .inputSchema(uploadSchema)
   .action(async ({ parsedInput }) => {
-    const book = addAudiobookFromUpload(parsedInput);
-    return { id: book.id, title: book.title };
+    const apiBase = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
+    const url = `${apiBase}/api/audiobooks/upload`;
+
+    const cookieStore = await cookies();
+    const cookieHeader = cookieStore.toString();
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          cookie: cookieHeader,
+        },
+        body: JSON.stringify(parsedInput),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to upload audiobook: ${res.statusText}`);
+      }
+
+      return await res.json();
+    } catch (error) {
+      console.error("Upload audiobook failed:", error);
+      throw error;
+    }
   });

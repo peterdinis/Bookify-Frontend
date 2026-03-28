@@ -34,22 +34,33 @@ export async function middleware(request: NextRequest) {
   const meUrl = getAuthMeUrl();
   const baseConfigured = Boolean(getServerApiBaseUrl());
 
+  // If not configured, we can't check auth, but we should probably still allow access to /login
   if (!baseConfigured || !meUrl) {
+    if (pathname === "/login") return NextResponse.next();
+    // If not configured and not on /login, we might want to redirect to /login anyway or show an error
+    // For now, let's keep it simple: if not configured, just proceed to allow dev work without backend
     return NextResponse.next();
   }
 
   let authenticated = false;
-  try {
-    const res = await fetch(meUrl, {
-      method: "GET",
-      headers: {
-        cookie: request.headers.get("cookie") ?? "",
-      },
-      cache: "no-store",
-    });
-    authenticated = res.ok;
-  } catch {
-    authenticated = false;
+  const cookieStore = request.cookies;
+  const cachedUser = cookieStore.get("bookify-user")?.value;
+
+  if (cachedUser) {
+    authenticated = true;
+  } else {
+    try {
+      const res = await fetch(meUrl, {
+        method: "GET",
+        headers: {
+          cookie: request.headers.get("cookie") ?? "",
+        },
+        cache: "no-store",
+      });
+      authenticated = res.ok;
+    } catch {
+      authenticated = false;
+    }
   }
 
   if (pathname === "/login") {

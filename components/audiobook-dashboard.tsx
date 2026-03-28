@@ -22,8 +22,10 @@ function formatTotalHours(minutes: number) {
 
 export function AudiobookDashboard({
   initialBooks,
+  user,
 }: {
   initialBooks: Audiobook[];
+  user?: { name: string; email: string } | null;
 }) {
   const [serverBooks, setServerBooks] = useState(initialBooks);
 
@@ -46,7 +48,7 @@ export function AudiobookDashboard({
 
   return (
     <div className="flex min-h-full flex-col">
-      <SiteHeader />
+      <SiteHeader user={user} />
       <div className="dashboard-bg flex-1">
         <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-8 px-4 py-6 sm:gap-10 sm:px-6 sm:py-10">
           <motion.section
