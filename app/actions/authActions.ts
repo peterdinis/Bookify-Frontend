@@ -43,13 +43,13 @@ export const getCurrentUserAction = actionClient
       }
 
       const user = await res.json();
-      
+
       // Store in cookie for persistence/caching (expire in 1 day)
       cookieStore.set("bookify-user", JSON.stringify(user), {
         httpOnly: false, // Allow client access if needed
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
-        maxAge: 60 * 60 * 24, 
+        maxAge: 60 * 60 * 24,
       });
 
       return { success: true, user };
@@ -60,10 +60,12 @@ export const getCurrentUserAction = actionClient
   });
 
 export const loginAction = actionClient
-  .inputSchema(z.object({
-    email: z.string().email(),
-    password: z.string().min(1),
-  }))
+  .inputSchema(
+    z.object({
+      email: z.string().email(),
+      password: z.string().min(1),
+    }),
+  )
   .action(async ({ parsedInput }) => {
     // This is a MOCK login for development to demonstrate the cookie logic.
     // In a real app, you'd call a backend login endpoint or Entra ID.

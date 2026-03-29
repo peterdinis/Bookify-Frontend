@@ -5,7 +5,11 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { logoutAction } from "@/app/actions/authActions";
 
-export function SiteHeader({ user }: { user?: { name: string; email: string } | null }) {
+export function SiteHeader({
+  user,
+}: {
+  user?: { name: string; email: string } | null;
+}) {
   const handleLogout = async () => {
     await logoutAction({});
     window.location.href = "/login";
@@ -33,11 +37,13 @@ export function SiteHeader({ user }: { user?: { name: string; email: string } | 
             <div className="hidden items-center gap-3 pr-2 sm:flex">
               <div className="flex flex-col items-end">
                 <p className="text-xs font-medium leading-none">{user.name}</p>
-                <p className="text-[10px] text-muted-foreground">{user.email}</p>
+                <p className="text-[10px] text-muted-foreground">
+                  {user.email}
+                </p>
               </div>
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                variant="ghost"
+                size="icon"
                 className="size-8"
                 onClick={handleLogout}
                 title="Log out"

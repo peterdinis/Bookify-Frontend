@@ -48,21 +48,25 @@ export function MicrosoftLoginCta() {
             </motion.div>
             <h1 className="text-2xl font-semibold tracking-tight">Bookify</h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Microsoft sign-in is handled by the backend — you will be redirected to
-              its OAuth flow.
+              Microsoft sign-in is handled by the backend — you will be
+              redirected to its OAuth flow.
             </p>
           </div>
           <Card className="border-border/80 shadow-lg">
             <CardHeader>
               <CardTitle>Sign in</CardTitle>
               <CardDescription>
-                Sign in with your Microsoft account to access your audio library.
+                Sign in with your Microsoft account to access your audio
+                library.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {!backend ? (
                 <p className="text-sm text-destructive">
-                  Set <code className="rounded bg-muted px-1">NEXT_PUBLIC_API_URL</code>{" "}
+                  Set{" "}
+                  <code className="rounded bg-muted px-1">
+                    NEXT_PUBLIC_API_URL
+                  </code>{" "}
                   to your backend URL.
                 </p>
               ) : null}

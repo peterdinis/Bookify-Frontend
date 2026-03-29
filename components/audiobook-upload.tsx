@@ -109,7 +109,7 @@ export function AudiobookUpload({
         if (result?.validationErrors) {
           const ve = result.validationErrors as Record<string, any>;
           const flat: FieldErrors = {};
-          
+
           for (const [key, val] of Object.entries(ve)) {
             if (val && typeof val === "object" && "_errors" in val) {
               flat[key] = (val as { _errors: string[] })._errors;
@@ -117,9 +117,10 @@ export function AudiobookUpload({
               flat[key] = val;
             }
           }
-          
+
           setFieldErrors(flat);
-          const firstError = Object.values(flat).flat()[0] ?? "Validation failed";
+          const firstError =
+            Object.values(flat).flat()[0] ?? "Validation failed";
           toast.error(firstError);
           error(firstError);
           return;
@@ -128,12 +129,12 @@ export function AudiobookUpload({
         if (result?.data) {
           toast.success(`Uploaded "${t.trim()}" successfully.`);
           load(result.data.id || "ok");
-          
+
           // Reset form
           setTitle("");
           setAuthor("");
-          setPondKey(prev => prev + 1);
-          
+          setPondKey((prev) => prev + 1);
+
           router.refresh();
         } else {
           toast.error("An unexpected error occurred.");

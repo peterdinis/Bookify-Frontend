@@ -7,9 +7,9 @@ export async function HomeContent() {
     listAudiobooksAction({}),
     getCurrentUserAction({}),
   ]);
-  
+
   const books = booksResult?.data ?? [];
   const user = userResult?.data?.success ? userResult.data.user : null;
-  
+
   return <AudiobookDashboard initialBooks={books} user={user} />;
 }

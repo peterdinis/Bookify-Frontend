@@ -26,19 +26,17 @@ export default function Error({
           Something went wrong!
         </h2>
         <p className="mb-8 max-w-md text-muted-foreground">
-          {error.message || "An unexpected error occurred while processing your request. Please try refreshing the page or contact support if the problem persists."}
+          {error.message ||
+            "An unexpected error occurred while processing your request. Please try refreshing the page or contact support if the problem persists."}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <Button
-            onClick={() => reset()}
-            className="gap-2"
-          >
+          <Button onClick={() => reset()} className="gap-2">
             <RefreshCcw className="size-4" />
             Try again
           </Button>
           <Button
             variant="outline"
-            onClick={() => window.location.href = "/"}
+            onClick={() => (window.location.href = "/")}
           >
             Go home
           </Button>

@@ -28,7 +28,9 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
           >
             <AlertTriangle className="size-7" aria-hidden />
           </motion.div>
-          <h1 className="text-xl font-semibold tracking-tight">Critical error</h1>
+          <h1 className="text-xl font-semibold tracking-tight">
+            Critical error
+          </h1>
           <p className="mt-2 text-sm text-muted-foreground">
             The app could not load. Refresh the page or try again later.
           </p>

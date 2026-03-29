@@ -22,9 +22,12 @@ export default function NotFound() {
         >
           <FileQuestion className="size-8" aria-hidden />
         </motion.div>
-        <h1 className="text-2xl font-semibold tracking-tight">Page not found</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">
+          Page not found
+        </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          This URL does not exist or has been moved. Check the address or go back home.
+          This URL does not exist or has been moved. Check the address or go
+          back home.
         </p>
         <Button asChild className="mt-8 gap-2">
           <Link href="/">
