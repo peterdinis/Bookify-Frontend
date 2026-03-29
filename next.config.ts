@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  reactStrictMode: true,
+  transpilePackages: ["lucide-react", "next-themes", "sonner"],
   async rewrites() {
     const backendUrl =
       process.env.API_URL ||
