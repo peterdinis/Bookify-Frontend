@@ -227,7 +227,7 @@ export function AudiobookPlayer({ src, title, className }: Props) {
               onChange={(e) =>
                 setSpeed(Number(e.target.value) as (typeof SPEEDS)[number])
               }
-              className="h-9 w-full max-w-[200px] rounded-md border border-input bg-background px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="h-9 w-full max-w-50 rounded-md border border-input bg-background px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               {SPEEDS.map((s) => (
                 <option key={s} value={s}>

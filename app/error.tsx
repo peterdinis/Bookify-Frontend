@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { AlertCircle, RefreshCcw } from "lucide-react";
-import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
 export default function Error({
@@ -12,13 +11,8 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    // Log the error to an error reporting service
-    console.error("Global error caught:", error);
-  }, [error]);
-
   return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center p-6 text-center">
+    <div className="flex min-h-100 flex-col items-center justify-center p-6 text-center">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}

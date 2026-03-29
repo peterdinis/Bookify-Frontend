@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { AlertTriangle } from "lucide-react";
-import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import "./globals.css";
 
@@ -12,10 +11,6 @@ type GlobalErrorProps = {
 };
 
 export default function GlobalError({ error, reset }: GlobalErrorProps) {
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
-
   return (
     <html lang="en">
       <body className="flex min-h-screen flex-col items-center justify-center bg-background px-4 font-sans text-foreground antialiased">

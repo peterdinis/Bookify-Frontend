@@ -12,7 +12,7 @@ export function SiteHeader({ user }: { user?: { name: string; email: string } | 
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-card/85 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-card/70">
+    <header className="sticky top-0 z-40 border-b bg-card/85 shadow-sm backdrop-blur-md supports-backdrop-filter:bg-card/70">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:h-16 sm:px-6">
         <div className="flex min-w-0 items-center gap-3">
           <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">

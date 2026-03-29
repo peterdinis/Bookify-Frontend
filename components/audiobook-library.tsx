@@ -65,7 +65,7 @@ export function AudiobookLibrary({
         className,
       )}
     >
-      <Card className="flex min-h-[280px] flex-col overflow-hidden border-border/80 bg-card/90 shadow-sm lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)]">
+      <Card className="flex min-h-70 flex-col overflow-hidden border-border/80 bg-card/90 shadow-sm lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)]">
         <CardHeader className="space-y-3 pb-3">
           <div>
             <CardTitle className="text-lg">Library</CardTitle>
@@ -117,7 +117,7 @@ export function AudiobookLibrary({
                             : "border-transparent bg-muted/30 hover:border-border hover:bg-muted/55",
                         )}
                       >
-                        <div className="relative size-[4.5rem] shrink-0 overflow-hidden rounded-lg bg-muted shadow-inner sm:size-20">
+                        <div className="relative size-18 shrink-0 overflow-hidden rounded-lg bg-muted shadow-inner sm:size-20">
                           <Image
                             src={book.coverImageUrl}
                             alt=""
@@ -190,7 +190,7 @@ export function AudiobookLibrary({
         {active ? (
           <>
             <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-muted shadow-md ring-1 ring-black/5 dark:ring-white/10">
-              <div className="relative aspect-[16/10] w-full sm:aspect-[21/9]">
+              <div className="relative aspect-16/10 w-full sm:aspect-21/9">
                 <Image
                   src={active.coverImageUrl}
                   alt=""
@@ -201,7 +201,7 @@ export function AudiobookLibrary({
                   unoptimized
                 />
                 <div
-                  className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent sm:bg-gradient-to-r sm:from-background/95 sm:via-background/40 sm:to-transparent"
+                  className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent sm:bg-linear-to-r sm:from-background/95 sm:via-background/40 sm:to-transparent"
                   aria-hidden
                 />
                 <div className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-4 sm:left-0 sm:top-0 sm:w-[min(100%,420px)] sm:justify-center sm:p-8">
@@ -262,7 +262,7 @@ export function AudiobookLibrary({
             </Card>
           </>
         ) : (
-          <Card className="flex min-h-[320px] flex-col items-center justify-center border-dashed bg-muted/20 p-8 text-center">
+          <Card className="flex min-h-80 flex-col items-center justify-center border-dashed bg-muted/20 p-8 text-center">
             <CardTitle className="text-base font-medium">
               No audiobooks yet
             </CardTitle>

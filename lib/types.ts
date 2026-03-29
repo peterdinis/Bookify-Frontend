@@ -10,6 +10,5 @@ export type Audiobook = {
   uploadedAt: string;
   originalFileName: string | null;
   sizeBytes: number | null;
-  /** True while waiting for server action (optimistic row). */
   isPending?: boolean;
 };
