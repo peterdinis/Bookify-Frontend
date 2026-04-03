@@ -10,6 +10,7 @@ import { z } from "zod";
  * or to handle "logout" by clearing cookies.
  */
 
+/** Server action — nevidí Entra cookie na API hoste. Pre Microsoft login použite `AuthProvider` / `fetchSessionUser`. */
 export const getCurrentUserAction = actionClient
   .inputSchema(z.object({}))
   .action(async () => {

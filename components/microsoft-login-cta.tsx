@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Loader2, Podcast } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,18 +12,35 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getApiBaseUrl, getMicrosoftLoginUrl } from "@/lib/api";
+import { getApiBaseUrl } from "@/lib/api";
+import { useAuth } from "@/components/auth-context";
 import { ThemeToggle } from "@/components/theme-toggle";
-
 export function MicrosoftLoginCta() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const {
+    user,
+    isLoading: authLoading,
+    msalReady,
+    configError,
+    loginWithMicrosoft,
+  } = useAuth();
   const backend = getApiBaseUrl();
-  const loginUrl = getMicrosoftLoginUrl();
 
-  const startLogin = () => {
-    if (!backend) return;
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.replace("/");
+    }
+  }, [authLoading, user, router]);
+
+  const startLogin = async () => {
+    if (!msalReady) return;
     setLoading(true);
-    window.location.assign(loginUrl);
+    try {
+      await loginWithMicrosoft();
+    } catch {
+      setLoading(false);
+    }
   };
 
   return (
@@ -48,8 +66,9 @@ export function MicrosoftLoginCta() {
             </motion.div>
             <h1 className="text-2xl font-semibold tracking-tight">Bookify</h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Microsoft sign-in is handled by the backend — you will be
-              redirected to its OAuth flow.
+              Prihlásenie cez Microsoft (MSAL) v prehliadači. Konfigurácia tenantu
+              a scope prichádza z API{" "}
+              <code className="rounded bg-muted px-1">/api/auth/config</code>.
             </p>
           </div>
           <Card className="border-border/80 shadow-lg">
@@ -61,41 +80,53 @@ export function MicrosoftLoginCta() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {!backend ? (
+              {configError ? (
+                <p className="text-destructive text-sm">{configError}</p>
+              ) : null}
+              {!authLoading && user ? (
+                <p className="text-muted-foreground text-center text-sm">
+                  Presmerovávam…
+                </p>
+              ) : null}
+              {!authLoading && user ? null : !backend ? (
                 <p className="text-sm text-destructive">
-                  Set{" "}
+                  V{" "}
+                  <code className="rounded bg-muted px-1">.env.local</code>{" "}
+                  nastav{" "}
                   <code className="rounded bg-muted px-1">
                     NEXT_PUBLIC_API_URL
                   </code>{" "}
-                  to your backend URL.
+                  (napr. http://localhost:5041).
                 </p>
               ) : null}
-              <div className="space-y-4">
-                <Button
-                  type="button"
-                  className="h-11 w-full gap-2"
-                  disabled={loading || !backend}
-                  onClick={startLogin}
-                >
-                  {loading ? (
-                    <Loader2 className="size-4 animate-spin" aria-hidden />
-                  ) : (
-                    <svg
-                      className="size-5"
-                      viewBox="0 0 21 21"
-                      aria-hidden
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <title>Microsoft</title>
-                      <rect x="1" y="1" width="9" height="9" fill="#f25022" />
-                      <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
-                      <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
-                      <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
-                    </svg>
-                  )}
-                  Continue with Microsoft
-                </Button>
-              </div>
+              {!authLoading && user ? null : backend ? (
+                <div className="space-y-4">
+                  <Button
+                    type="button"
+                    className="h-11 w-full gap-2"
+                    disabled={loading || !msalReady || authLoading}
+                    onClick={() => void startLogin()}
+                  >
+                    {loading || authLoading ? (
+                      <Loader2 className="size-4 animate-spin" aria-hidden />
+                    ) : (
+                      <svg
+                        className="size-5"
+                        viewBox="0 0 21 21"
+                        aria-hidden
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <title>Microsoft</title>
+                        <rect x="1" y="1" width="9" height="9" fill="#f25022" />
+                        <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
+                        <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
+                        <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
+                      </svg>
+                    )}
+                    Continue with Microsoft
+                  </Button>
+                </div>
+              ) : null}
             </CardContent>
           </Card>
         </motion.div>

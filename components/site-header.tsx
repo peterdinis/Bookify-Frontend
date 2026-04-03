@@ -1,16 +1,28 @@
 "use client";
 
-import { Podcast, LogOut, User as UserIcon } from "lucide-react";
+import { Podcast, LogOut, User } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/components/auth-context";
+import { getApiBaseUrl } from "@/lib/api";
 import { logoutAction } from "@/app/actions/authActions";
 
-export function SiteHeader({
-  user,
-}: {
-  user?: { name: string; email: string } | null;
-}) {
+export function SiteHeader() {
+  const { user, signOut } = useAuth();
+
   const handleLogout = async () => {
+    if (getApiBaseUrl()) {
+      signOut();
+      return;
+    }
     await logoutAction({});
     window.location.href = "/login";
   };
@@ -34,23 +46,38 @@ export function SiteHeader({
 
         <div className="flex shrink-0 items-center gap-2">
           {user ? (
-            <div className="hidden items-center gap-3 pr-2 sm:flex">
-              <div className="flex flex-col items-end">
-                <p className="text-xs font-medium leading-none">{user.name}</p>
-                <p className="text-[10px] text-muted-foreground">
-                  {user.email}
-                </p>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="size-8"
-                onClick={handleLogout}
-                title="Log out"
-              >
-                <LogOut className="size-4" />
-              </Button>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="max-w-[200px] gap-2 border-border/80"
+                >
+                  <User className="size-4 shrink-0 opacity-70" aria-hidden />
+                  <span className="truncate font-medium">{user.name}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      {user.name}
+                    </p>
+                    <p className="text-muted-foreground text-xs leading-none">
+                      {user.email || "—"}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-destructive focus:text-destructive"
+                  onClick={() => void handleLogout()}
+                >
+                  <LogOut className="mr-2 size-4" aria-hidden />
+                  Odhlásiť sa
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : null}
           <ThemeToggle />
         </div>
