@@ -1,4 +1,4 @@
-# Bookify — Frontend
+# Bookify — Frontend STILL UNDER DEVELOPMENT
 
 A modern audiobook streaming web application built with **Next.js 16** and **React 19**. Bookify lets users browse, upload, and listen to audiobooks with real-time playback progress tracking, Microsoft Entra ID authentication, and a polished UI.
 
