@@ -1,8 +1,8 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
-import { AuthProvider } from "@/components/auth-context";
 import { MsalProvider } from "./auth/msal-provider";
+import { AuthProvider } from "./auth-context";
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
@@ -12,7 +12,11 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
       enableSystem
       disableTransitionOnChange
     >
-      <MsalProvider>{children}</MsalProvider>
+      <MsalProvider>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </MsalProvider>
     </ThemeProvider>
   );
 }

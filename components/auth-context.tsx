@@ -10,8 +10,14 @@ import {
   useState,
 } from "react";
 import { useRouter } from "next/navigation";
-import { fetchSessionUser, type SessionUser } from "@/lib/auth-client";
-import type { EntraMsalConfig } from "@/lib/entra-config";
+import {
+  clearBookifyAccessToken,
+  exchangeEntraOidForSession,
+  fetchSessionUser,
+  getBookifyAccessToken,
+  type SessionUser,
+} from "@/lib/auth-client";
+import { getEntraOidFromAccount, type EntraMsalConfig } from "@/lib/msal-env";
 import { getMsalBootstrap } from "@/lib/msal-bootstrap";
 import { getApiBaseUrl } from "@/lib/api";
 
@@ -28,19 +34,40 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+function profileFromAccount(account: AccountInfo): {
+  name?: string;
+  email?: string;
+} {
+  const claims = account.idTokenClaims as Record<string, unknown> | undefined;
+  const name = typeof claims?.name === "string" ? claims.name : undefined;
+  const email =
+    typeof claims?.email === "string"
+      ? claims.email
+      : typeof claims?.preferred_username === "string"
+        ? claims.preferred_username
+        : undefined;
+  return { name, email };
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [entra, setEntra] = useState<EntraMsalConfig | null>(null);
   const [msal, setMsal] = useState<PublicClientApplication | null>(null);
   const [user, setUser] = useState<SessionUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  /** Len MSAL init + redirect (bez čakania na backend). */
+  const [msalLoading, setMsalLoading] = useState(true);
+  /** Backend /me alebo /session — len ak je MSAL účet alebo uložený Bookify token. */
+  const [sessionLoading, setSessionLoading] = useState(false);
   const [configError, setConfigError] = useState<string | null>(null);
 
-  const loadUserFromMsal = useCallback(
-    async (instance: PublicClientApplication, cfg: EntraMsalConfig) => {
+  const isLoading = msalLoading || sessionLoading;
+
+  const syncBackendWithMsalAccount = useCallback(
+    async (instance: PublicClientApplication, _cfg: EntraMsalConfig) => {
       const account =
         instance.getActiveAccount() ?? instance.getAllAccounts()[0] ?? null;
       if (!account) {
+        clearBookifyAccessToken();
         setUser(null);
         return;
       }
@@ -49,16 +76,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(null);
         return;
       }
-      try {
-        const result = await instance.acquireTokenSilent({
-          scopes: cfg.scopes,
-          account,
-        });
-        const u = await fetchSessionUser(result.accessToken);
-        setUser(u);
-      } catch {
+
+      const oid = getEntraOidFromAccount(account);
+      if (!oid) {
         setUser(null);
+        return;
       }
+
+      let u = await fetchSessionUser();
+      if (!u) {
+        const { name, email } = profileFromAccount(account);
+        u = await exchangeEntraOidForSession(oid, name, email);
+      }
+      setUser(u);
     },
     [],
   );
@@ -68,18 +98,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null);
       return;
     }
-    await loadUserFromMsal(msal, entra);
-  }, [msal, entra, loadUserFromMsal]);
+    await syncBackendWithMsalAccount(msal, entra);
+  }, [msal, entra, syncBackendWithMsalAccount]);
 
   useEffect(() => {
     let cancelled = false;
 
     (async () => {
-      setIsLoading(true);
+      setMsalLoading(true);
+      setSessionLoading(false);
       setConfigError(null);
       try {
         if (!getApiBaseUrl()) {
-          if (!cancelled) setIsLoading(false);
           return;
         }
         const { instance, entra: cfg } = await getMsalBootstrap();
@@ -98,10 +128,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           ) {
             router.replace("/");
           }
-          await loadUserFromMsal(instance, cfg);
-        } else {
-          await loadUserFromMsal(instance, cfg);
         }
+
+        const account =
+          instance.getActiveAccount() ?? instance.getAllAccounts()[0] ?? null;
+        const hasStoredToken = getBookifyAccessToken() !== null;
+        if (account !== null || hasStoredToken) {
+          setSessionLoading(true);
+        }
+        setMsalLoading(false);
+
+        await syncBackendWithMsalAccount(instance, cfg);
       } catch (e) {
         if (!cancelled) {
           setConfigError(
@@ -110,14 +147,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(null);
         }
       } finally {
-        if (!cancelled) setIsLoading(false);
+        if (!cancelled) {
+          setSessionLoading(false);
+          setMsalLoading(false);
+        }
       }
     })();
 
     return () => {
       cancelled = true;
     };
-  }, [loadUserFromMsal, router]);
+  }, [syncBackendWithMsalAccount, router]);
 
   const loginWithMicrosoft = useCallback(async () => {
     if (!msal || !entra) return;
@@ -127,6 +167,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [msal, entra]);
 
   const signOut = useCallback(() => {
+    clearBookifyAccessToken();
     if (!msal) {
       window.location.href = "/login";
       return;

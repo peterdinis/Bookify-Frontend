@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/components/auth-context";
 import { getApiBaseUrl } from "@/lib/api";
-import { logoutAction } from "@/app/actions/authActions";
 
 export function SiteHeader() {
   const { user, signOut } = useAuth();
@@ -23,7 +22,6 @@ export function SiteHeader() {
       signOut();
       return;
     }
-    await logoutAction({});
     window.location.href = "/login";
   };
 

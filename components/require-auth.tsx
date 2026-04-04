@@ -38,7 +38,7 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
       <div className="flex min-h-[40vh] flex-col items-center justify-center gap-3 px-4 text-center text-sm">
         <p className="text-destructive max-w-md">{configError}</p>
         <p className="text-muted-foreground">
-          Skontroluj backend, premenné v appsettings (AzureAd) a či beží API.
+          Skontroluj .env (NEXT_PUBLIC_AZURE_*), backend SessionJwt a či beží API.
         </p>
       </div>
     );

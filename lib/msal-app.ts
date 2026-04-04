@@ -2,7 +2,7 @@ import {
   type Configuration,
   PublicClientApplication,
 } from "@azure/msal-browser";
-import type { EntraMsalConfig } from "@/lib/entra-config";
+import type { EntraMsalConfig } from "@/lib/msal-env";
 
 export function buildMsalConfiguration(entra: EntraMsalConfig): Configuration {
   const redirectUri =
@@ -22,7 +22,7 @@ export function buildMsalConfiguration(entra: EntraMsalConfig): Configuration {
       postLogoutRedirectUri:
         typeof window !== "undefined"
           ? `${window.location.origin}/login`
-          : entra.postLogoutRedirectUri,
+          : "http://localhost:3000/login",
     },
     cache: {
       cacheLocation: "sessionStorage",
